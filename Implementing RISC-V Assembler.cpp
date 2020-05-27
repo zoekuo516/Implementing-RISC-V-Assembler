@@ -7,7 +7,7 @@
 #pragma warning( disable : 4996 )
 using namespace std;
 
-string HexToBinary_12bit(int inputHex)
+string DecToBinary_12bit(int inputHex)
 {
 	if (inputHex == 0)
 		return "000000000000";
@@ -32,7 +32,7 @@ string HexToBinary_12bit(int inputHex)
 	return ANS;
 }
 
-string HexToBinary_5bit(int inputHex)	//十進位轉二進位(12bit)
+string DecToBinary_5bit(int inputHex)	//十進位轉二進位(12bit)
 {
 	if (inputHex == 0)
 		return "00000";
