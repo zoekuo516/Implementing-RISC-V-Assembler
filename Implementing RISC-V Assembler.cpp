@@ -1,372 +1,343 @@
-﻿
 #include <iostream>
-#include<string>
-#include <string.h> 
-#include <stdio.h> 
+#include <string>
 #include <vector>
-#include <cstring>
+#include <sstream>
+
 #define MAX 32
 #pragma warning( disable : 4996 )
 using namespace std;
 
-
-vector<string> split(const string& str, const string& delim) {
-	vector<string> res;
-	if ("" == str) return res;
-	//先將要切割的字符串從string類型轉換為char*類型
-	char * strs = new char[str.length() + 1]; //不要忘了
-	strcpy(strs, str.c_str());
-
-	char * d = new char[delim.length() + 1];
-	strcpy(d, delim.c_str());
-
-	char *p = strtok(strs, d);
-	
-	while (p) {
-		string s = p; //分割得到的字符串轉換為string類型
-		res.push_back(s); //存入结果數组
-		p = strtok(NULL, d);
-	}
-
-	return res;
-}
-string ttt(const string&str)
+string HexToBinary_12bit(int inputHex)
 {
-	if (str == "0")
+	if (inputHex == 0)
 		return "000000000000";
-	else {
-		int num, i = 0;
-		num = stoi(str);
-		int bin[MAX], length = 0;
-		do
-		{
-			bin[i] = num % 2;
-			num = num / 2;
-			i++;
-			length++;
-		} while (num != 1);
-		bin[length] = num;
-		length++;
-		string result;
-		for (i = length - 1; i >= 0; i--)
-			result = result + to_string(bin[i]);
-		while (result.size() != 12)
-			result = "0" + result;
-		return result;
+	string ans_reverse="";
+	int temp = inputHex;
+	while (temp != 0)
+	{
+		if (temp % 2 == 0)
+			ans_reverse += "0";
+		else if (temp % 2 == 1)
+			ans_reverse += "1";
+		temp /=  2;
 	}
+
+	string ANS="";
+	for (int i = 11; i >= 0; i--) {
+		if (i > ans_reverse.length()-1)
+			ANS += "0";
+		else
+			ANS += ans_reverse[i];
+	}
+	return ANS;
 }
-string ttt2(const string&str)
+
+string HexToBinary_5bit(int inputHex)	//十進位轉二進位(12bit)
 {
-	if (str == "0")
+	if (inputHex == 0)
 		return "00000";
-	else {
-		int num, i = 0;
-		num = stoi(str);
-		int bin[MAX], length = 0;
-		do
-		{
-			bin[i] = num % 2;
-			num = num / 2;
-			i++;
-			length++;
-		} while (num != 1);
-		bin[length] = num;
-		length++;
-		string result;
-		for (i = length - 1; i >= 0; i--)
-			result = result + to_string(bin[i]);
-		while (result.size() != 5)
-			result = "0" + result;
-		return result;
+	string ans_reverse = "";
+	int temp = inputHex;
+	while (temp != 0)
+	{
+		if (temp % 2 == 0)
+			ans_reverse += "0";
+		else if (temp % 2 == 1)
+			ans_reverse += "1";
+		temp /= 2;
 	}
+
+	string ANS = "";
+	for (int i = 4; i >= 0; i--) {
+		if (i > ans_reverse.length() - 1)
+			ANS += "0";
+		else
+			ANS += ans_reverse[i];
+	}
+	return ANS;
 }
 
-void test() { //正常字符串
-	cout << "******test****** " << endl;
-	string s;
-	string imm;
-	while (s != "exit") {
-		getline(cin, s);
-		string answer = "";
-		string temp = "";
-		string temp2 = "";
-		if (s == "exit") {
-			cout << "bye bye";
-		}
-		//lb x27, 0(x10)
-		else {
-				s = s.replace(s.find(" "), 1, ",");
-				
-			std::vector<string> res = split(s, ",");
-
-			if (res[0] == "lb" || res[0] == "lh" || res[0] == "lw" || res[0] == "lbu"
-				|| res[0] == "lhu" || res[0] == "sb" || res[0] == "sh" || res[0] == "sw")
-			{
-				s = s.replace(s.find(" "), 1, "");
-				s = s.replace(s.find(")"), 1, "");
-				s = s.replace(s.find("("), 1, ",");
-				res = split(s, ",");
-			}
-
-			for (int i = 0; i < res.size(); ++i)
-			{
-				if (res[i] == "x0") {
-					res[i] = "00000";
-				}
-				else if (res[i] == "x1") {
-					res[i] = "00001";
-				}
-				else if (res[i] == "x2") {
-					res[i] = "00010";
-				}
-				else if (res[i] == "x3") {
-					res[i] = "00011";
-				}
-				else if (res[i] == "x4") {
-					res[i] = "00100";
-				}
-				else if (res[i] == "x5") {
-					res[i] = "00101";
-				}
-				else if (res[i] == "x6") {
-					res[i] = "00110";
-				}
-				else if (res[i] == "x7") {
-					res[i] = "00111";
-				}
-				else if (res[i] == "x8") {
-					res[i] = "01000";
-				}
-				else if (res[i] == "x9") {
-					res[i] = "01001";
-				}
-				else if (res[i] == "x10") {
-					res[i] = "01010";
-				}
-				else if (res[i] == "x11") {
-					res[i] = "01011";
-				}
-				else if (res[i] == "x12") {
-					res[i] = "01100";
-				}
-				else if (res[i] == "x13") {
-					res[i] = "01101";
-				}
-				else if (res[i] == "x14") {
-					res[i] = "01110";
-				}
-				else if (res[i] == "x15") {
-					res[i] = "01111";
-				}
-				else if (res[i] == "x16") {
-					res[i] = "10000";
-				}
-				else if (res[i] == "x17") {
-					res[i] = "10001";
-				}
-				else if (res[i] == "x18") {
-					res[i] = "10010";
-				}
-				else if (res[i] == "x19") {
-					res[i] = "10011";
-				}
-				else if (res[i] == "x20") {
-					res[i] = "10100";
-				}
-				else if (res[i] == "x21") {
-					res[i] = "10101";
-				}
-				else if (res[i] == "x22") {
-					res[i] = "10110";
-				}
-				else if (res[i] == "x23") {
-					res[i] = "10111";
-				}
-				else if (res[i] == "x24") {
-					res[i] = "11000";
-				}
-				else if (res[i] == "x25") {
-					res[i] = "11001";
-				}
-				else if (res[i] == "x26") {
-					res[i] = "11010";
-				}
-				else if (res[i] == "x27") {
-					res[i] = "11011";
-				}
-				else if (res[i] == "x28") {
-					res[i] = "11100";
-				}
-				else if (res[i] == "x29") {
-					res[i] = "11101";
-				}
-				else if (res[i] == "x30") {
-					res[i] = "11110";
-				}
-				else if (res[i] == "x31") {
-					res[i] = "11111";
-				}
-
-			}
-			
-			for (int i = 0; i < res.size(); ++i)
-			{
-				if (res[i] == "lb")
-				{
-					//answer = ttt(res[i + 2]) + res[i + 3] + "000" + res[i + 1] + "0000011";
-
-				}
-				if (res[i] == "lh")
-				{
-					answer = ttt(res[i + 2]) + res[i + 3] + "001" + res[i + 1] + "0000011";
-				}
-				if (res[i] == "lw")
-				{
-					answer = ttt(res[i + 2]) + res[i + 3] + "010" + res[i + 1] + "0000011";
-				}
-				if (res[i] == "lbu")
-				{
-					answer = ttt(res[i + 2]) + res[i + 3] + "100" + res[i + 1] + "0000011";
-				}
-				if (res[i] == "lhu") 
-				{
-					answer = ttt(res[i + 2]) + res[i + 3] + "101" + res[i + 1] + "0000011";
-				}
-				if (res[i] == "sb")
-				{
-					imm = res[i + 2];
-					imm = ttt(imm);
-					answer = answer.append(imm, 0, 7);
-					answer = answer + res[i + 1] + res[i + 3] + "000";
-					answer = answer.append(imm, 7, 5);
-					answer = answer + "0100011";
-
-				}
-				if (res[i] == "sh")
-				{
-					imm = res[i + 2];
-					imm = ttt(imm);
-					answer = answer.append(imm, 0, 7);
-					answer = answer + res[i + 1] + res[i + 3] + "001";
-					answer = answer.append(imm, 7, 5);
-					answer = answer + "0100011";
-
-				}
-				if (res[i] == "sw")
-				{
-					imm = res[i + 2];
-					imm = ttt(imm);
-					answer = answer.append(imm, 0, 7);
-					answer = answer + res[i + 1] + res[i + 3] + "010";
-					answer = answer.append(imm, 7, 5);
-					answer = answer + "0100011";
-
-				}
-			
-				if (res[i] == "addi")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "000" + res[i + 1] + "0010011" ;
-				}
-				
-				if (res[i] == "slti")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "010" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "sltiu")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "011" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "xori")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "100" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "ori")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "110" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "andi")
-				{
-					answer = ttt(res[i + 3]) + res[i + 2] + "111" + res[i + 1] + "0010011";
-				}
-
-
-				if (res[i] == "slli")
-				{
-					answer = "0000000" + ttt2(res[i + 3]) + res[i + 2] + "001" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "srli")
-				{
-					answer = "0000000" + ttt2(res[i + 3]) + res[i + 2] + "101" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "srai")
-				{
-					answer = "0100000" + ttt2(res[i + 3]) + res[i + 2] + "101" + res[i + 1] + "0010011";
-				}
-
-				if (res[i] == "add")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "000" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "sub")
-				{
-					answer = "0100000" + res[i + 3] + res[i + 2] + "000" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "sll")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "001" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "slt")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "010" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "sltu")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "011" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "xor")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "100" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "srl")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "101" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "sra")
-				{
-					answer = "0100000" + res[i + 3] + res[i + 2] + "101" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "or")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "110" + res[i + 1] + "0110011";
-				}
-
-				if (res[i] == "and")
-				{
-					answer = "0000000" + res[i + 3] + res[i + 2] + "111" + res[i + 1] + "0110011";
-				}
-				//cout << res[i]<<endl;
-			}		
-			cout << "answer:" << answer;
-		}
-	}
-}
 
 int main() {
-	test();
-	system("pause");
+	cout << "Input instruction : ";
+	string inst, imm, answer;
+
+	while (getline(cin, inst)) {
+		if (inst == "")
+			continue;
+
+		vector<string> regist;
+
+		for (int i = 0; i < inst.length(); i++) {
+			if (inst[i]== ',' ||inst[i]== ')' ||inst[i]== '(') {
+				inst[i] = ' ';
+			}
+		}
+
+		stringstream ss(inst);
+		string tempGet;
+		while (ss >> tempGet) {
+			regist.push_back(tempGet);
+		}
+
+		for (int i = 0; i < regist.size(); i++)
+		{
+			if (regist[i] == "x0") {
+				regist[i] = "00000";
+			}
+			else if (regist[i] == "x1") {
+				regist[i] = "00001";
+			}
+			else if (regist[i] == "x2") {
+				regist[i] = "00010";
+			}
+			else if (regist[i] == "x3") {
+				regist[i] = "00011";
+			}
+			else if (regist[i] == "x4") {
+				regist[i] = "00100";
+			}
+			else if (regist[i] == "x5") {
+				regist[i] = "00101";
+			}
+			else if (regist[i] == "x6") {
+				regist[i] = "00110";
+			}
+			else if (regist[i] == "x7") {
+				regist[i] = "00111";
+			}
+			else if (regist[i] == "x8") {
+				regist[i] = "01000";
+			}
+			else if (regist[i] == "x9") {
+				regist[i] = "01001";
+			}
+			else if (regist[i] == "x10") {
+				regist[i] = "01010";
+			}
+			else if (regist[i] == "x11") {
+				regist[i] = "01011";
+			}
+			else if (regist[i] == "x12") {
+				regist[i] = "01100";
+			}
+			else if (regist[i] == "x13") {
+				regist[i] = "01101";
+			}
+			else if (regist[i] == "x14") {
+				regist[i] = "01110";
+			}
+			else if (regist[i] == "x15") {
+				regist[i] = "01111";
+			}
+			else if (regist[i] == "x16") {
+				regist[i] = "10000";
+			}
+			else if (regist[i] == "x17") {
+				regist[i] = "10001";
+			}
+			else if (regist[i] == "x18") {
+				regist[i] = "10010";
+			}
+			else if (regist[i] == "x19") {
+				regist[i] = "10011";
+			}
+			else if (regist[i] == "x20") {
+				regist[i] = "10100";
+			}
+			else if (regist[i] == "x21") {
+				regist[i] = "10101";
+			}
+			else if (regist[i] == "x22") {
+				regist[i] = "10110";
+			}
+			else if (regist[i] == "x23") {
+				regist[i] = "10111";
+			}
+			else if (regist[i] == "x24") {
+				regist[i] = "11000";
+			}
+			else if (regist[i] == "x25") {
+				regist[i] = "11001";
+			}
+			else if (regist[i] == "x26") {
+				regist[i] = "11010";
+			}
+			else if (regist[i] == "x27") {
+				regist[i] = "11011";
+			}
+			else if (regist[i] == "x28") {
+				regist[i] = "11100";
+			}
+			else if (regist[i] == "x29") {
+				regist[i] = "11101";
+			}
+			else if (regist[i] == "x30") {
+				regist[i] = "11110";
+			}
+			else if (regist[i] == "x31") {
+				regist[i] = "11111";
+			}
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////// SB-type
+		if (regist[0] == "bne")
+		{
+			//imm[12|10:5] rs2 rs1 001 imm[4:1|11] 1100011
+			answer = "*******" + regist[2] + regist[1] + "001" + "*****" + "1100011";
+		}
+		else if (regist[0] == "beq")
+		{
+			answer = "*******" + regist[2] + regist[1] + "000" + "*****" + "1100011";
+		}
+		else if (regist[0] == "blt")
+		{
+			answer = "*******" + regist[2] + regist[1] + "100" + "*****" + "1100011";
+		}
+		else if (regist[0] == "bgt")
+		{
+			answer = "*******" + regist[2] + regist[1] + "101" + "*****" + "1100011";
+		}
+		else if (regist[0] == "bltu")
+		{
+			answer = "*******" + regist[2] + regist[1] + "110" + "*****" + "1100011";
+		}
+		else if (regist[0] == "bgtu")
+		{
+			answer = "*******" + regist[2] + regist[1] + "111" + "*****" + "1100011";
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////// I-type
+		else if (regist[0] == "lb")					//lb x12,1(x5)
+		{
+			answer = HexToBinary_12bit(stoi(regist[2])) + regist[3] + "000" + regist[1] + "0000011";
+		}
+		else if (regist[0] == "lh")
+		{
+			answer = HexToBinary_12bit(stoi(regist[2])) + regist[3] + "001" + regist[1] + "0000011";
+		}
+		else if (regist[0] == "lw")
+		{
+			answer = HexToBinary_12bit(stoi(regist[2])) + regist[3] + "010" + regist[1] + "0000011";
+		}
+		else if (regist[0] == "lbu")
+		{
+			answer = HexToBinary_12bit(stoi(regist[2])) + regist[3] + "100" + regist[1] + "0000011";
+		}
+		else if (regist[0] == "lhu")
+		{
+			answer = HexToBinary_12bit(stoi(regist[2])) + regist[3] + "101" + regist[1] + "0000011";
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////// I-type
+		else if (regist[0] == "addi")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "000" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "slti")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "010" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "sltiu")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "011" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "xori")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "100" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "ori")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "110" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "andi")
+		{
+			answer = HexToBinary_12bit(stoi(regist[3])) + regist[2] + "111" + regist[1] + "0010011";
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////// S-type
+		else if (regist[0] == "sd" || regist[0] == "sb" || regist[0] == "sh" || regist[0] == "sw")
+		{
+			imm = regist[2];
+			imm = HexToBinary_12bit(stoi(imm));
+			answer = answer.append(imm, 0, 7);
+			switch (regist[0][1])
+			{
+			case 'd':
+				answer = answer + regist[1] + regist[3] + "011";
+				break;
+			case 'b':
+				answer = answer + regist[1] + regist[3] + "000";
+				break;
+			case 'h':
+				answer = answer + regist[1] + regist[3] + "001";
+				break;
+			case 'w':
+				answer = answer + regist[1] + regist[3] + "010";
+				break;
+			}
+			answer = answer.append(imm, 7, 5);
+			answer = answer + "0100011";
+		}
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		else if (regist[0] == "slli")
+		{
+			answer = "0000000" + HexToBinary_5bit(stoi(regist[3])) + regist[2] + "001" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "srli")
+		{
+			answer = "0000000" + HexToBinary_5bit(stoi(regist[3])) + regist[2] + "101" + regist[1] + "0010011";
+		}
+		else if (regist[0] == "srai")
+		{
+			answer = "0100000" + HexToBinary_5bit(stoi(regist[3])) + regist[2] + "101" + regist[1] + "0010011";
+		}
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////// R-type
+		else if (regist[0] == "add")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "000" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "sub")
+		{
+			answer = "0100000" + regist[3] + regist[2] + "000" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "sll")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "001" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "slt")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "010" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "sltu")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "011" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "xor")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "100" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "srl")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "101" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "sra")
+		{
+			answer = "0100000" + regist[3] + regist[2] + "101" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "or")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "110" + regist[1] + "0110011";
+		}
+		else if (regist[0] == "and")
+		{
+			answer = "0000000" + regist[3] + regist[2] + "111" + regist[1] + "0110011";
+		}
+		else {
+			answer = "";
+			cout << "We don't have this instruction!!!" << endl;
+			continue;
+		}
+
+		cout << "The answer is : " << answer << endl << "Input next instruction : ";
+	}
+
 	return 0;
 }
