@@ -55,7 +55,6 @@ string DecToBinary_5bit(int inputHex)	//十進位轉二進位(12bit)
 			ANS += ans_reverse[i];
 	}
 	return ANS;
-	
 }
 
 
